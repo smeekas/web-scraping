@@ -1,54 +1,43 @@
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.*;
-import java.net.URL;
+import java.util.Scanner;
 
 public class Scrap {
-    public static void main(String[] args) throws IOException {
-        try {
-            String uri="https://www.google.com/search?q=haikyu&sxsrf=ALeKk01ZbhGF1183dCY2M4F3R3rPDm3OiQ:1624022182573&source=lnms&tbm=isch&sa=X&ved=2ahUKEwiqn7KKoqHxAhVJ7HMBHTCIAx4Q_AUoAXoECAEQAw&biw=1536&bih=722";
-            Document doc = Jsoup.connect(uri).get();
-            Elements ee= doc.getElementsByTag("img");
-            Elements ee2= doc.getElementsByClass("rg_i Q4LuWd");
-            System.out.println(ee2.size());
-                for(int i=0;i<ee2.size();i++) {
-                    String tmp = null;
-                    if(ee2.get(i).hasAttr("data-src")){
-                         tmp = ee2.get(i).attr("data-src");
-                    }else if(ee2.get(i).hasAttr("src")){
-                        tmp=ee2.get(i).attr("src");
+    public static void main(String[] args)  {
 
-                    }else {
-                        continue;
-                    }
-                    if(!tmp.startsWith("http")){
-                        continue;
-                    }
-//                    System.out.println(ee2.get(i));
-                    System.out.println(tmp);
+try{
+    Scanner scan=new Scanner(System.in);
+    System.out.print("enter topic name :");
+    String topic=scan.nextLine().trim();
+    topic=topic.replace(" ","_");
 
+    System.out.print("enter abosulte path of directory :");
 
-                    URL url = new URL(tmp);
-                    InputStream in = new BufferedInputStream(url.openStream());
-                    OutputStream out = new BufferedOutputStream(new FileOutputStream("C:\\Users\\LENOVO\\Desktop\\images\\"+i+".jpg"));
+    String path=scan.nextLine();
+    if(path.charAt(path.length()-1)!='/'){
+        path=path+"/";
+    }
 
-                    for (int j; (j = in.read()) != -1; ) {
-                        out.write(j);
-                    }
-                    in.close();
-                    out.close();
-                }
-//            FileWriter fw = new FileWriter(output);
-//            fw.write(trs.toString());
+    String uri="https://en.wikipedia.org/wiki/"+topic;
+    Document doc=Jsoup.connect(uri).get();
+    Elements ee=doc.getElementsByTag("p");
+    System.out.println(ee.size());
+    FileWriter fw=new FileWriter(path+"op.txt");
+    int len= Math.min(ee.size(), 50);
+    for(int i=0;i<len;i++){
+        fw.write( ee.get(i).text());
 
-        }catch(Exception e){
-            System.out.println(e);
-        }
+    }
+    System.out.println("Done!!");
+
+}catch(Exception e){
+    System.out.println(e);
+    System.out.println("try again!");
+}
 
 
-//
     }
 }
