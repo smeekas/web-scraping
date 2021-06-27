@@ -7,7 +7,7 @@ import java.net.URL;
 import java.util.Scanner;
 
 public class ImageScraper {
-    public static void main(String[] args) {
+   public void scrap(){
                 try {
                     Scanner scan=new Scanner(System.in);
                     System.out.print("enter topic name :");
